@@ -1,0 +1,128 @@
+------ QUERY TO DISPLAY ALL THE DETAILS OF PROPERTIES HAVING THE PROPERTY IS NOT SOLD -------
+
+SQL> SELECT NAME,PROPERTY_TYPE,LOCATION,PRICE,HN_PROPERTIES.STATUS FROM HN_USERS,HN_PROPERTIES
+     WHERE USER_ID = SELLER_ID AND HN_PROPERTIES.STATUS = 'AVAILABLE';
+
+     NAME                 PROPERTY_T LOCATION                  PRICE STATUS
+     -------------------- ---------- -------------------- ---------- ----------
+     SAMEER               HOUSE      KERALA                  4560000 AVAILABLE
+     JOHN                 LAND       JAIPUR                  3000000 AVAILABLE
+
+
+------ QUERY TO DISPLAY THE MOST EXPENCIVE PROPERTY PRICE -------
+
+SQL> SELECT MAX(PRICE) FROM HN_PROPERTIES;
+
+     MAX(PRICE)
+     ----------
+     5644000
+
+
+------ QUERY TO DISPLAY THE AVERAGE PRICE OF THE PROPERTY -------
+
+
+SQL> SELECT AVG(PRICE) FROM HN_PROPERTIES;
+
+     AVG(PRICE)
+     ----------
+     4659000
+
+
+------ QUERY TO DISPLAY THE NUMBER OF LOCATIONS THAT ARE READY TO SELLING THE PROPERTIES -------
+
+SQL> SELECT COUNT(*),LOCATION FROM HN_PROPERTIES
+     GROUP BY LOCATION;
+
+     COUNT(*)   LOCATION
+     ---------- --------------------
+         1      DELHI
+         1      ODDISA
+         1      KERALA
+         1      JAIPUR
+
+  1  SELECT * FROM HN_PROPERTIES
+  2* WHERE PRICE > (SELECT AVG(PRICE) FROM HN_PROPERTIES)
+SQL> /
+
+PROPER SELLER PROPERTY_T LOCATION             STATUS          PRICE   BEDROOMS  BATHROOMS
+------ ------ ---------- -------------------- ---------- ---------- ---------- ----------
+P2     A4     FLAT       ODDISA               SOLD          5644000          4          5
+P4     A7     FLAT       DELHI                SOLD          5432000          3          3
+
+SQL> SELECT * FROM HN_PROPERTIES
+  2  WHERE STATUS = 'AVAILABLE';
+
+PROPER SELLER PROPERTY_T LOCATION             STATUS          PRICE   BEDROOMS  BATHROOMS
+------ ------ ---------- -------------------- ---------- ---------- ---------- ----------
+P1     A3     HOUSE      KERALA               AVAILABLE     4560000          3          4
+P3     A6     LAND       JAIPUR               AVAILABLE     3000000          0          0
+
+SQL> SELECT P1.PRICE FROM HN_PROPERTIES
+  2  WHERE 1 IN (SELECT COUNT(DISTINCT(P2.PRICE)) FROM HN_PROPERTIES P2
+  3              WHERE P1.PRICE < P2.PRICE);
+SELECT P1.PRICE FROM HN_PROPERTIES
+       *
+ERROR at line 1:
+ORA-00904: "P1"."PRICE": invalid identifier
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT P1.PRICE FROM HN_PROPERTIES P1
+  2  WHERE 1 IN (SELECT COUNT(DISTINCT(P2.PRICE)) FROM HN_PROPERTIES P2
+  3*             WHERE P1.PRICE < P2.PRICE)
+SQL> /
+
+     PRICE
+----------
+   5432000
+
+
+
+SQL> SELECT COUNT(*),SELLER_ID FROM HN_PROPERTIES
+  2  GROUP BY SELLER_ID
+  3  HAVING COUNT(*) > 1;
+
+  COUNT(*) SELLER
+---------- ------
+         2 A3
+
+
+  1  SELECT E.NAME,COUNT(*) FROM HN_USERS E,HN_PROPERTIES H
+  2  WHERE E.USER_ID = H.SELLER_ID
+  3* GROUP BY E.NAME
+SQL> /
+
+NAME                   COUNT(*)
+-------------------- ----------
+SAMEER                        2
+ANITHA                        1
+JOHN                          1
+AMITH                         1
+
+
+  1  SELECT E.NAME,COUNT(*) AS TOTAL_PROPERTIES,SUM(H.PRICE) AS TOTAL_VALUE FROM HN_USERS E,HN_PROPERTIES H
+  2  WHERE E.USER_ID = H.SELLER_ID
+  3* GROUP BY E.NAME
+SQL> /
+
+NAME                 TOTAL_PROPERTIES TOTAL_VALUE
+-------------------- ---------------- -----------
+SAMEER                              2    11237000
+ANITHA                              1     5644000
+JOHN                                1     3000000
+AMITH                               1     5432000
+
+
+
+  1  SELECT NAME AS SELLER_NAME,PRICE AS EXPENSIVE_PROPERTY FROM HN_USERS,HN_PROPERTIES
+  2* WHERE USER_ID = SELLER_ID AND PRICE = (SELECT MAX(PRICE) FROM HN_PROPERTIES)
+SQL> /
+
+SELLER_NAME          EXPENSIVE_PROPERTY
+-------------------- ------------------
+SAMEER                          6677000
+
+
+

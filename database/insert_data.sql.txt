@@ -1,0 +1,42 @@
+-------- QUERY TO INSERT THE DATA INTO THE HN_USERS TABLE ------------
+
+INSERT INTO HN_USERS VALUES('&USER_ID','&NAME','&EMAIL','&PHONE_NO','&ROLE','&CITY')
+
+SQL> SELECT * FROM HN_USERS;
+
+USER_ID NAME                 EMAIL                                              PHONE_NO   ROLE            CITY
+------- -------------------- -------------------------------------------------- ---------- --------------- --------------------
+A1      RAVI                 ravi@gmail.com                                     8899744663 BUYER           CHENNAI
+A2      AJAY                 ajay@gmail.com                                     3355776655 AGENT           ANDHRA PRADESH
+A3      SAMEER               sameer@gmail.com                                   5577889944 SELLER          TAMIL NADU
+A4      ANITHA               anitha@gmail.com                                   3458769809 SELLER          MUMBAI
+A5      KISHORE              kishore@gmail.com                                  2543768999 BUYER           BIHAR
+A6      JOHN                 john@gmail.com                                     7898654523 SELLER          ASSAM
+A7      AMITH                amith@gmail.com                                    9384756099 SELLER          DELHI
+
+
+-------- QUERY TO INSERT THE DATA INTO THE HN_PROPERTIES TABLE ------------
+
+INSERT INTO HN_PROPERTIES VALUES('&PROPERTY_ID','&SELLER_ID','&PROPERTY_TYPE','&LOCATION','&STATUS',&PRICE,&BEDROOMS,&BATHROOMS)
+
+SQL> SELECT * FROM HN_PROPERTIES;
+
+PROPERTY_ID SELLER_ID PROPERTY_TYPE LOCATION             STATUS        PRICE      BEDROOMS   BATHROOMS
+----------- --------- ------------- -------------------- ------------- ---------- ---------- ----------
+P1          A3        HOUSE         KERALA               AVAILABLE     4560000    3          4
+P2          A4        FLAT          ODDISA               SOLD          5644000    4          5
+P3     	    A6        LAND          JAIPUR               AVAILABLE     3000000    0          0
+P4          A7        FLAT          DELHI                SOLD          5432000    3          3
+P5          A3        FLAT          VIZAG                AVAILABLE     6677000    3          4
+
+
+-------- QUERY TO INSERT THE DATA INTO THE HN_BOOKINGS TABLE ------------
+
+INSERT INTO HN_BOOKINGS VALUES('&BOOKING_ID','&BUYER_ID','&PROPERTY_ID','&BOOKING_DATE','&STATUS')
+
+SQL> SELECT * FROM HN_BOOKINGS;
+
+BOOKING_ID BUYER_ID PROPERTY_ID BOOKING_DATE STATUS
+---------- -------- ----------- ------------ ---------------
+B1         A1       P2          21-DEC-1999  CONFIRMED
+B2         A5       P4          16-JAN-2004  PENDING
